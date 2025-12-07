@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
+    <style>
+        body {
+            background-color: #1f1f1f;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-y: hidden;
+
+        }
+
+        .side-bar {
+            background-color: #191919;
+            margin: -10px;
+            width: 260px;
+            height: 666px;
+        }
+
+        .close-side-bar {
+            width: 60px;
+            height: 666px;
+            margin-left: -10px;
+            background-color: #191919;
+        }
+
+        .new-chat {
+            margin-bottom: 0px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .user-input {
+            background-color: transparent;
+            border: none;
+            border-radius: 30px;
+            width: 520px;
+            height: 50px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .user-input::placeholder {
+            color: white;
+            font-size: 16px;
+            opacity: 0.5;
+        }
+
+        .check-notes {
+            display: none;
+        }
+
+        .check-notes.active {
+            display: block;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 6px;
+            margin-bottom: 0px;
+        }
+
+        /* Shared container */
+        .chat-container {
+            width: 820px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 15px 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Base (hidden) states */
+        .message.user,
+        .message.ai {
+            display: none;
+        }
+
+        /* User message visible */
+        .message.user.active {
+            display: block;
+            align-self: flex-end;
+            background-color: #444;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 15px 15px 0px 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        /* AI message visible */
+        .message.ai.active {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        /* AI profile pic */
+        .ai-profile {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Text formatting for both */
+        .text {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .message.ai.active .text {
+            background-color: #2f2f2f;
+            color: #e6e6e6;
+            padding: 10px 14px;
+            border-radius: 15px 15px 15px 0px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="display: flex; gap: 10px;">
+        <div class="side-bar">
+            <div style="display: flex; gap: 185px; padding-left: 20px; padding-top: 20px;">
+                <img class="chatGPT-btn" style="width: 20px; height: 20px;" src="chat-gpt.png">
+                <div class="side-bar-btn"
+                    style="width: 15px; height: 13px; border-radius: 4px; border: solid #cbcbcb 1px;">
+                    <div style="width: 1.2px; height: 13px; border: none; background-color: #cbcbcb; margin-left: 4px;">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-left: 20px; margin-top: 15px;">
+                <img style="width: 15px; height: 15px; margin-top: 15px;" src="add.png">
+                <p class="new-chat">New chat</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-left: 20px; margin-top: 0px;">
+                <img style="width: 18px; height: 18px; margin-top: 15px; margin-left: -2px;" src="search.png">
+                <p class="search-chats"
+                    style="margin-bottom: 0px; margin-left: -1px; font-size: 14px; margin-top: 17px;">Search chats</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-left: 20px;">
+                <img style="width: 15px; height: 15px; margin-top: 15px;" src="gallery.png">
+                <p class="library" style="margin-bottom: 5px; font-size: 14px;  margin-top: 17px;">Library</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-left: 20px;">
+                <img style="width: 15px; height: 15px; margin-top: 15px;" src="folder.png">
+                <p class="projects" style="font-size: 14px;  margin-top: 16px;">Projects</p>
+            </div>
+
+            <p class="chats" style="margin-left: 18px; font-size: 14.5px; color:#aaaaaa;">Chats</p>
+
+            <div
+                style="display: flex; margin-top: 385px; margin-left: 8px; border-radius: 10px; height: 45px; width: 247px;">
+                <div style="display: flex; gap: 7px; margin-top: -10px; margin-left: 7px;">
+                    <img style="width: 25px; height: 25px; border-radius: 100%; margin-top: 20px;" src="girl pic.jpg">
+                    <div class="user-name-div" style="margin-top: 3px;">
+                        <p style="margin-bottom: 0px; font-size: 14px;">Lucifer</p>
+                        <p style="margin-top: 0px; font-size: 12px; color:#aaaaaa;">Free</p>
+                    </div>
+
+                    <button class="upgrade-btn"
+                        style="margin-left: 75px; background-color: #1f1f1f; color: white; width: 70px; height: 28px; border: solid rgba(128, 128, 128, 0.281); border-radius: 20px; font-size: 12px; font-weight: bold; margin-top: 19px;">Upgrade</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 845px; height: auto; background-color: transparent;">
+            <div style="display: flex; justify-content: space-between; height: 50px;">
+                <p style="margin-left: 20px; margin-top: 5px; font-size: 18px;">ChatBot</p>
+                <button
+                    style="background-color: #3c1f57; color: white; width: 150px; height: 35px; border: solid rgba(128, 128, 128, 0.281); border-radius: 15px; border: none;">Upgrade
+                    to Go</button>
+                <img style="width: 20px; height: 20px; margin-right: -5px; margin-top: 5px;" src="dots.png">
+            </div>
+
+
+            <div class="chat-container">
+
+                <!-- User message -->
+                <div class="message user">
+                    <pre class="text"></pre>
+                </div>
+
+                <!-- AI message -->
+                <div class="message ai">
+                    <img class="ai-profile" src="robot.png" alt="AI Profile">
+                    <pre class="text"></pre>
+                </div>
+
+            </div>
+
+            <div class="intro-text">
+                <p style="text-align: center; margin-top: 160px; font-size: 28px;">What can I help with?</p>
+            </div>
+
+            <div class="input-div"
+                style="background-color: #303030; border:solid #363636 1px; width: 630px; height: 55px; border-radius: 30px; margin-left: 120px;">
+                <img style="width: 15px; height: 15px; margin-top: 20px; margin-left: 20px;" src="plus.png">
+                <input class="user-input" type="text" placeholder="Ask anything">
+                <img style="width: 15px; height: 15px; margin-top: 20px;" src="microphone-black-shape.png">
+                <img class="send-btn" style="width: 15px; height: 15px; margin-top: 20px; margin-left: 10px;"
+                    src="send.png">
+
+            </div>
+
+
+            <p class="check-notes">ChatBot can make mistakes. Check important info.</p>
+
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const sideBarBtn = document.querySelector(".side-bar-btn");
+        let sidebarIsClosed = false;
+
+        sideBarBtn.onclick = function () {
+            document.querySelector(".side-bar").classList.add("close-side-bar"); // change the class
+
+            document.querySelector(".new-chat").style.display = "none";
+            document.querySelector(".search-chats").style.display = "none";
+            document.querySelector(".library").style.display = "none";
+            document.querySelector(".projects").style.display = "none";
+            document.querySelector(".chats").style.display = "none";
+            document.querySelector(".user-name-div").style.display = "none";
+            document.querySelector(".upgrade-btn").style.display = "none";
+
+            sideBarBtn.style.display = "none"; //hide the close side bar icon
+
+            sidebarIsClosed = true;
+        };
+
+        const chatGPTbtn = document.querySelector(".chatGPT-btn");
+
+        function expand() {
+            chatGPTbtn.style.display = "inline";
+
+            document.querySelector(".side-bar").classList.remove("close-side-bar"); // change the class
+
+            document.querySelector(".new-chat").style.display = "inline";
+            document.querySelector(".search-chats").style.display = "inline";
+            document.querySelector(".library").style.display = "inline";
+            document.querySelector(".projects").style.display = "inline";
+            document.querySelector(".chats").style.display = "inline";
+            document.querySelector(".user-name-div").style.display = "inline";
+            document.querySelector(".upgrade-btn").style.display = "inline";
+            sideBarBtn.style.display = "inline"; //show the close side bar icon
+
+            sidebarIsClosed = false;
+        }
+
+        const sideBar = document.querySelector(".side-bar");
+        sideBar.addEventListener("mouseenter", () => {
+            if (sidebarIsClosed == true) {
+                chatGPTbtn.style.display = "none";
+                sideBarBtn.style.display = "inline";
+
+                sideBarBtn.onclick = expand;
+            }
+        });
+        sideBar.addEventListener("mouseleave", () => {
+            if (sidebarIsClosed == true) {
+                chatGPTbtn.style.display = "inline";
+                sideBarBtn.style.display = "none";
+            }
+        });
+
+        const userInput = document.querySelector(".user-input");
+
+        async function getAIResponse() {
+            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer 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',
+                    'HTTP-Referer': 'https://your-site.com', // optional
+                    'X-Title': 'My Chatbot', // optional
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: 'openai/gpt-4o',
+                    messages: [
+                        { role: 'user', content: userInput.value },
+                    ],
+                }),
+            });
+
+            const data = await response.json();
+            // ✅ get the actual AI text
+            const aiText = data.choices[0].message.content;
+
+            // now display it
+            addAIMessage(aiText);
+            console.log(data);
+        }
+
+        // send button
+        const sendBtn = document.querySelector(".send-btn");
+
+        sendBtn.onclick = function () {
+            const inputDiv = document.querySelector(".input-div");
+            const checkNotes = document.querySelector(".check-notes");
+            const introText = document.querySelector(".intro-text");
+
+            introText.style.display = "none";
+            checkNotes.classList.add("active");
+            inputDiv.style.marginTop = "525px";
+
+            console.log(userInput.value);
+            getAIResponse();
+        }
+
+        const chatContainer = document.querySelector(".chat-container");
+
+        // USER message
+        function addUserMessage(text) {
+            const userMsg = document.createElement("pre");
+            userMsg.className = "text user-text message user"; // base class (hidden)
+            userMsg.textContent = text;
+            userMsg.classList.add("active"); // make it visible
+            chatContainer.appendChild(userMsg);
+
+        }
+
+        // AI message
+        function addAIMessage(text) {
+            const aiMessageDiv = document.createElement("div");
+            aiMessageDiv.className = "message ai"; // hidden by default
+            aiMessageDiv.classList.add("active"); // show it
+
+            const aiImg = document.createElement("img");
+            aiImg.className = "ai-profile";
+            aiImg.src = "robot.png"; // your bot image path
+
+            const aiText = document.createElement("pre");
+            aiText.className = "text ai-text";
+            aiText.textContent = text;
+
+            aiMessageDiv.appendChild(aiImg);
+            aiMessageDiv.appendChild(aiText);
+            chatContainer.appendChild(aiMessageDiv);
+        }
+
+
+    </script>
+
+</body>
+
+</html>
