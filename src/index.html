@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind Test</title>
+  <link rel="stylesheet" href="output.css">
+</head>
+
+<body class="dark:bg-lighter-dark transition-colors duration-300">
+
+  <div class="flex">
+    <div class="w-64 h-screen bg-white dark:bg-darker transition-colors duration-300"> <!--sidebar -->
+      <div class="flex p-4 gap-5">
+        <p class="text-2xl font-bold dark:text-white">ColorForge</p>
+        <div id="toggle" class="border-black border-2 w-12 h-6 rounded-2xl mt-1 ml-9 dark:border-white">
+          <div id="circle"
+            class="bg-black rounded-full h-5 w-5 flex items-center justify-center cursor-pointer dark:bg-white transition-all duration-500">
+            <img id="icon" class="w-3 h-3" src="assets/sun (1).png" alt="">
+          </div>
+        </div>
+      </div>
+
+      <div class="ml-4">
+        <div
+          class="flex items-center pl-4 gap-2 w-[220px] h-8 rounded-lg cursor-pointer hover:bg-Lavender atcive:bg-Lavender hover:dark:bg-lighter-dark">
+          <img class="w-4 h-4" id="dashboards" src="assets/dashboards (1).png" alt="">
+          <p class="dark:text-white">Dashboard</p>
+        </div>
+
+        <div
+          class="flex items-center pl-4 gap-2 mt-1 w-[220px] h-8 rounded-lg cursor-pointer hover:bg-Lavender atcive:bg-Lavender hover:dark:bg-lighter-dark">
+          <img class="w-4 h-4" id="history" src="assets/history (1).png" alt="">
+          <p class="dark:text-white">History</p>
+        </div>
+
+        <div
+          class="flex items-center pl-4 gap-2 mt-1 w-[220px] h-8 rounded-lg cursor-pointer hover:bg-Lavender atcive:bg-Lavender hover:dark:bg-lighter-dark">
+          <img class="w-4 h-4" id="favorites" src="assets/star (1).png" alt="">
+          <p class="dark:text-white">Favorites</p>
+        </div>
+
+        <div id="aboutBtn"
+          class="flex items-center pl-4 gap-2 mt-1 w-[220px] h-8 rounded-lg cursor-pointer hover:bg-Lavender atcive:bg-Lavender hover:dark:bg-lighter-dark">
+          <img class="w-4 h-4" id="about" src="assets/info (1).png" alt="">
+          <a>
+            <p class="dark:text-white">About</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section id="default" class=" flex flex-col items-center">
+        <div class="mt-3 ml-[835px]">
+          <img class="w-7 h-7 rounded-full" src="assets/Elham.png" alt="">
+        </div>
+
+        <h1 class="text-center text-2xl dark:text-white">Generate Beautiful Color Palettes Instantly</h1>
+        <h2 class="text-center dark:text-white">Upload any image and get the closest matching Tailwind CSS colors —
+          fast,
+          accurate, and ready to use.</h2>
+
+        <div class="w-[450px] h-[200px] border-solid border-gray-700 border-2 rounded-lg mt-8 dark:border-gray-400">
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-white text-center mt-10">Drag & Drop zone</h1>
+          <p class="text-lg md:text-xl text-gray-500 dark:text-gray-300 text-center">or click to browse...</p>
+
+          <div class="text-center">
+            <button class="w-36 h-9 bg-black text-white rounded-lg mt-4 dark:bg-white dark:text-black">Choose
+              Image</button>
+          </div>
+
+          <p class="text-center mt-0.5 text-sm text-gray-600 dark:text-gray-400">Max size: 10MB</p>
+        </div>
+      </section>
+
+      <section id="about-page" class="hidden">
+        <div class="ml-16 mt-10">
+          <h1 class="font-bold text-2xl dark:text-white">About ColorForge</h1>
+          <h2 class="dark:text-gray-400">ColorForge is a simple, lightweight tool designed to help you create beautiful color</h2>
+          <h2 class="dark:text-gray-400">gradients with ease. Whether you're working on a website, app UI, or just experimenting</h2>
+          <h2 class="dark:text-gray-400">with color, ColorForge gives you quick, clean results without any complexity.</h2>
+        </div>
+      </section>
+    </main>
+
+
+  </div>
+
+
+
+  <!-- npx tailwindcss -i ./src/input.css -o ./src/output.css --watch -->
+
+
+  <script>
+    const toggle = document.getElementById("toggle");
+    const circle = document.getElementById("circle");
+    const icon = document.getElementById("icon");
+
+    const icons = {
+      dashboards: ["assets/dashboards (1).png", "assets/dashboards.png"],
+      history: ["assets/history (1).png", "assets/history.png"],
+      favorites: ["assets/star (1).png", "assets/star.png"],
+      about: ["assets/info (1).png", "assets/info.png"],
+    };
+
+    let dark = false; // 
+
+    toggle.addEventListener("click", () => {
+      if (!dark) {
+        circle.style.transform = "translate(15px, 0px)";
+        icon.src = "assets/moon (1).png";
+        document.body.classList.add("dark");
+        document.body.style.backgroundColor = '#1e1e1e';
+
+        //change the images according to theme
+        Object.keys(icons).forEach(id => {
+          document.getElementById(id).src = dark ? icons[id][0] : icons[id][1];
+        });
+
+
+      } else {
+        circle.style.transform = "translate(0px, 0px)";
+        icon.src = "assets/sun (1).png";
+        document.body.classList.remove("dark");
+        document.body.style.backgroundColor = '#FAFAFA';
+
+        //change the images according to theme
+        Object.keys(icons).forEach(id => {
+          document.getElementById(id).src = dark ? icons[id][0] : icons[id][1];
+        });
+      }
+      dark = !dark;
+    });
+
+    //side bar functions
+
+    const aboutBtn = document.getElementById("aboutBtn");
+    const aboutPage = document.getElementById("about-page");
+    const defaultStyle = document.getElementById("default");
+
+    let check = true;
+
+    aboutBtn.onclick = function () {
+      if (defaultStyle.style.display === "none") {
+        // default is hidden → show default, hide about
+        defaultStyle.style.display = "inline";
+        aboutPage.style.display = "none";
+      } else {
+        // default is visible → hide default, show about
+        defaultStyle.style.display = "none";
+        aboutPage.style.display = "inline";
+      }
+    };
+
+  </script>
+
+</body>
+
+</html>
